@@ -1,4 +1,6 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # 추가된 부분
+
 import torch
 from shap_e.diffusion.sample import sample_latents
 from shap_e.diffusion.gaussian_diffusion import diffusion_from_config
@@ -6,8 +8,10 @@ from shap_e.models.download import load_model, load_config
 from shap_e.util.notebooks import decode_latent_mesh
 
 app = Flask(__name__)
+CORS(app)
 
-# 디바이스 체크가 필요
+CORS(app, origins=["http://your-allowed-domain.com", "http://127.0.0.1:5173"])
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 xm = load_model('transmitter', device=device)
